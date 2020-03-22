@@ -3,42 +3,51 @@ package main
 import (
 	"fmt"
 	"log"
+	"math/big"
 	"net/http"
 	"strconv"
 )
 
+const PORT = 8001
+
 func main() {
+	fmt.Println("Go server started on port " + strconv.Itoa(PORT))
 	http.HandleFunc("/", handler)
-	log.Fatal(http.ListenAndServe(":8080", nil))
+	log.Fatal(http.ListenAndServe(":" + strconv.Itoa(PORT), nil))
 }
 
 func handler(w http.ResponseWriter, r *http.Request) {
 	if len(r.URL.Path) < 2 {
-		fmt.Fprint(w, "Enter number of fibonacci sequence elements as path :)")
-		return;
+		fmt.Fprint(w, "Go server is asking you to enter some number as a path :)")
+		return
 	}
 	i, err := strconv.Atoi(r.URL.Path[1:])
 	if err != nil {
 		fmt.Fprint(w, "Path is not a number :(")
 		return
 	}
-	fmt.Fprintf(w, "Here is your fibonacci sequence: \n%s", sliceToString(fib(i)))
+	if i < 2 {
+		fmt.Fprintf(w, "Please enter a number larger that %d :(", i)
+		return
+	}
+	fmt.Fprint(w, "Here is your fibonacci sequence: \n")
+	fmt.Fprint(w, sliceToString(fib(i)))
 }
 
-func sliceToString (array []int64) string {
+func sliceToString (array []*big.Int) string {
 	result := ""
 	for i := 0; i < len(array); i++ {
-		result += strconv.Itoa(i + 1) + ": " + strconv.Itoa(int(array[i])) + "\n"
+		result += strconv.Itoa(i + 1) + ": " + array[i].String() + "\n"
 	}
 	return result
 }
 
-func fib (max int) []int64 {
-	sequence := make([]int64 , max)
-	sequence[0] = 0
-	sequence[1] = 1
+func fib (max int) []*big.Int {
+	sequence := make([]*big.Int , max)
+	sequence[0] = big.NewInt(0)
+	sequence[1] = big.NewInt(1)
 	for i := 2; i < max; i++ {
-		sequence[i] = sequence[i - 1] + sequence[i - 2]
+		sequence[i] = big.NewInt(0).Add(sequence[i - 1], sequence[i - 2])
 	}
 	return sequence
 }

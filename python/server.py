@@ -1,6 +1,6 @@
 from BaseHTTPServer import BaseHTTPRequestHandler, HTTPServer
 
-PORT = 8000
+PORT = 8002
 
 
 def array_to_string(array):
@@ -22,9 +22,10 @@ class Handler(BaseHTTPRequestHandler):
     # Handler for the GET requests
     def do_GET(self):
         self.send_response(200)
-        self.send_header('Content-type', 'text/html')
         self.end_headers()
-        # Send the html message
+        if len(self.path) < 2:
+            self.wfile.write("Python server is asking you to enter some number as a path :)")
+            return
         try:
             self.wfile.write(
                 "Fibonacci sequence you requested: \n" +
@@ -39,9 +40,9 @@ try:
     # Create a web server and define the handler to manage the
     # incoming request
     server = HTTPServer(('', PORT), Handler)
-    print('Started httpserver on port ', PORT)
+    print("Python server started on port " + str(PORT))
 
-    # Wait forever for incoming htto requests
+    # Wait forever for incoming http requests
     server.serve_forever()
 
 except KeyboardInterrupt:
