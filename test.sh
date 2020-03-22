@@ -16,3 +16,6 @@ echo "\n"
 
 echo "-----------------------PYTHON"
 hey "http://localhost:8002${path}"
+
+echo "-----------------------KOTLIN"
+hey "http://localhost:8003${path}"

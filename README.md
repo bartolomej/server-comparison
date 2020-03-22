@@ -15,6 +15,7 @@ Install for MacOS via `brew install hey`.
 | Node.js |  8000 |
 | Golang |    8001  |
 | Python | 8002 |
+| Kotlin | 8003 |
 
 Run tests:
 1. Start servers with `sh start.sh`
@@ -24,3 +25,5 @@ Example:
 ```bash
 sh start.sh && sh test.sh /1000 10
 ```
+
+If server process doesn't shut down try running `lsof -i tcp:<port>` and `kill <pid>`.
